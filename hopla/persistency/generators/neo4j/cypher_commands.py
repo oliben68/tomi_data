@@ -1,7 +1,7 @@
 from abc import abstractmethod
 
-from hopla.persistency.generators import BaseGenerator
-from hopla.persistency.generators import BooleanOperator
+from hopla.persistency.generators.base_generator import BaseGenerator
+from hopla.persistency.generators.neo4j import BooleanOperator
 
 
 class CypherCommands(BaseGenerator):
@@ -66,7 +66,7 @@ class CypherCommands(BaseGenerator):
         keys_values = [
             "`{key}`: {value}".format(key=key.replace(property_prefix, ""), value=CypherCommands.format_value(value))
             for key, value in properties.items() if key not in excluded_properties and value is not None
-            ]
+        ]
         return "{{{props}}}".format(props=", ".join(keys_values))
 
     @staticmethod
@@ -83,4 +83,3 @@ class CypherCommands(BaseGenerator):
             key not in (CypherCommands.excluded_properties if excluded is None else excluded) and value is not None
         ]
         return boolean_operator.value.join(properties_values)
-

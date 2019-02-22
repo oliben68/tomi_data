@@ -1,7 +1,7 @@
+from hopla.base.shared.meta_singleton import MetaSingleton
 from neobolt.exceptions import ServiceUnavailable
 
-from hopla.base.shared.meta_singleton import MetaSingleton
-from hopla.persistency import Operation, OperationType
+from hopla.persistency.operation import Operation, OperationType
 
 try:
     from hopla.base.config import DB_CONFIG

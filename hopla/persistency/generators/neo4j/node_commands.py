@@ -2,8 +2,8 @@ from collections.abc import MutableSequence
 
 from hopla.base.collections import flatten
 from hopla.base.graphs.nodes.node import Node
-from hopla.persistency.generators import CypherCommands
-#from hopla.base.persistency.generators.neo4j.relationship_commands import RelationshipCommands
+
+from hopla.persistency.generators.neo4j.cypher_commands import CypherCommands
 
 
 class NodeCommands(CypherCommands):

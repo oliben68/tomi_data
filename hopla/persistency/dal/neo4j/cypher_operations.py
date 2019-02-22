@@ -1,15 +1,15 @@
 from datetime import datetime
 
-from neo4j.types.graph import Node as Neo4jNode
-
 from hopla.base.collections import expand
 from hopla.base.graphs.nodes.node import Node
 from hopla.base.graphs.relationships.core import Direction
-from hopla.persistency.drivers.neo4j import NEO_INSTANCE
-from hopla.persistency.generators import GraphCommands
-from hopla.persistency.generators import NodeCommands
-from hopla.persistency.generators import RelationshipCommands
-from hopla.persistency import Operation, OperationType
+from neo4j.types.graph import Node as Neo4jNode
+
+from hopla.persistency.drivers.neo4j.graph_db import NEO_INSTANCE
+from hopla.persistency.generators.neo4j.graph_commands import GraphCommands
+from hopla.persistency.generators.neo4j.node_commands import NodeCommands
+from hopla.persistency.generators.neo4j.relationship_commands import RelationshipCommands
+from hopla.persistency.operation import OperationType, Operation
 
 
 class CypherOperations(object):
@@ -17,8 +17,8 @@ class CypherOperations(object):
 
     @staticmethod
     def _execute(transaction):
-        def run_transaction(transaction, command):
-            result = transaction.run(command)
+        def run_transaction(tran, command):
+            result = tran.run(command)
             return result
 
         results = []
@@ -140,9 +140,9 @@ class CypherOperations(object):
                 relationship = node1 > node2
 
         if rel_type is not None:
-            relationship = relationship(rel_type=str(rel_type))
+            relationship = relationship.__(rel_type=str(rel_type))
         if len(properties) > 0:
-            relationship = relationship(data=properties)
+            relationship = relationship.__(data=properties)
 
         return CypherOperations.create_relationship(relationship, variable=variable)
 

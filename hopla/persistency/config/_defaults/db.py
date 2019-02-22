@@ -1,9 +1,9 @@
 import os
+
 import yaml
 
 _current_dir = os.path.dirname(os.path.realpath(__file__))
 _yaml_file = os.path.join(_current_dir, os.path.splitext(__file__)[0] + ".yml")
-
 
 DB_CONFIG = {}
 

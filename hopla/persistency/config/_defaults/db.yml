@@ -4,5 +4,5 @@ config:
     port: 7687
     protocol: bolt
   user:
-      name: neo4j
-      password: 123456
+    name: neo4j
+    password: 123456

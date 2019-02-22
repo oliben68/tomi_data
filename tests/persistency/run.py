@@ -1,4 +1,5 @@
 from hopla.base.graphs.nodes.node import Node
+
 from hopla.persistency.dal.neo4j import CypherOperations
 from hopla.persistency.generators import NodeCommands
 
@@ -18,5 +19,5 @@ r1 = (n1 < n2)(rel_type="buddies_ole_boys",
 # print(RelationshipCommands(r1).self_generate_create(variable="r1"))
 
 # result = CypherOperations.create_nodes_relationship(n1, n2, rel_type="BUDDINSKY", variable='r')
-result = CypherOperations.delete_all() #create_relationship(r1, variable='r')
+result = CypherOperations.delete_all()  # create_relationship(r1, variable='r')
 result
