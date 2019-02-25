@@ -1,5 +1,5 @@
 package:
-    name: persistency
+    name: tomi_data
     version: 0.0.1
     configuration_pkg: config
     tests: pytest
