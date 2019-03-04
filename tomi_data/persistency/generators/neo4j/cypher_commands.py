@@ -1,7 +1,7 @@
 from abc import abstractmethod
 
-from hopla.persistency.generators.base_generator import BaseGenerator
-from hopla.persistency.generators.neo4j import BooleanOperator
+from tomi_data.persistency.generators.base_generator import BaseGenerator
+from tomi_data.persistency.generators.neo4j import BooleanOperator
 
 
 class CypherCommands(BaseGenerator):

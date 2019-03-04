@@ -1,7 +1,7 @@
 from hopla.base.shared.meta_singleton import MetaSingleton
 from neobolt.exceptions import ServiceUnavailable
 
-from hopla.persistency.operation import Operation, OperationType
+from tomi_data.persistency.operation import Operation, OperationType
 
 try:
     from hopla.base.config import DB_CONFIG
@@ -24,6 +24,7 @@ class GraphDb(metaclass=MetaSingleton):
         self._driver = None
         self._operations = {}
         try:
+            print(DB_CONFIG)
             self._driver = GraphDatabase.driver(
                 "{protocol}://{host}:{port}".format(protocol=DB_CONFIG["server"]["protocol"],
                                                     host=DB_CONFIG["server"]["host"],

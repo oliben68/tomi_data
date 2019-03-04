@@ -2,14 +2,14 @@ from datetime import datetime
 
 from hopla.base.collections import expand
 from hopla.base.graphs.nodes.node import Node
-from hopla.base.graphs.relationships.core import Direction
+from hopla.base.graphs.relationships.core.direction import Direction
 from neo4j.types.graph import Node as Neo4jNode
 
-from hopla.persistency.drivers.neo4j.graph_db import NEO_INSTANCE
-from hopla.persistency.generators.neo4j.graph_commands import GraphCommands
-from hopla.persistency.generators.neo4j.node_commands import NodeCommands
-from hopla.persistency.generators.neo4j.relationship_commands import RelationshipCommands
-from hopla.persistency.operation import OperationType, Operation
+from tomi_data.persistency.drivers.neo4j.graph_db import NEO_INSTANCE
+from tomi_data.persistency.generators.neo4j.graph_commands import GraphCommands
+from tomi_data.persistency.generators.neo4j.node_commands import NodeCommands
+from tomi_data.persistency.generators.neo4j.relationship_commands import RelationshipCommands
+from tomi_data.persistency.operation import OperationType, Operation
 
 
 class CypherOperations(object):

@@ -1,9 +1,9 @@
 from hopla.base.collections import flatten
-from hopla.base.graphs.relationships.core import Direction
+from hopla.base.graphs.relationships.core.direction import Direction
 from hopla.base.graphs.relationships.relationship import Relationship
 
-from hopla.persistency.generators.neo4j.cypher_commands import CypherCommands
-from hopla.persistency.generators.neo4j.node_commands import NodeCommands
+from tomi_data.persistency.generators.neo4j.cypher_commands import CypherCommands
+from tomi_data.persistency.generators.neo4j.node_commands import NodeCommands
 
 
 class RelationshipCommands(CypherCommands):

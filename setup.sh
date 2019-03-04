@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 ROOT=tomi
-PROJECT=${ROOT}_base
+COMPONENT=data
+PROJECT=${ROOT}_${COMPONENT}
 
 rm -rf /Users/oliviersteck/Documents/sources/python/${ROOT}/${PROJECT}/build
 

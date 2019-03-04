@@ -3,7 +3,7 @@ from collections.abc import MutableSequence
 from hopla.base.collections import flatten
 from hopla.base.graphs.nodes.node import Node
 
-from hopla.persistency.generators.neo4j.cypher_commands import CypherCommands
+from tomi_data.persistency.generators.neo4j.cypher_commands import CypherCommands
 
 
 class NodeCommands(CypherCommands):

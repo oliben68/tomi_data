@@ -52,6 +52,7 @@ class ConfigInstaller(Command):
 
     def run(self):
         def install_in_target(target_config_dir):
+            print("*" * 30, target_config_dir, "*" * 30)
             if not os.path.isdir(target_config_dir):
                 print("!" * 16, "Skipping {dir}: not found!".format(dir=target_config_dir), "!" * 16)
                 return
@@ -98,7 +99,7 @@ setup(
     author='Olivier Steck',
     author_email='osteck@gmail.com',
     description='TBD',
-    install_requires=['neo4j'],
+    install_requires=['neo4j', 'hopla'],
     extras_require=dict(
         test=['testfixtures', ],
     ),

@@ -1,8 +1,8 @@
 from hopla.base.graphs.graphs.graph import Graph
 
-from hopla.persistency.generators.base_generator import BaseGenerator
-from hopla.persistency.generators.neo4j.node_commands import NodeCommands
-from hopla.persistency.generators.neo4j.relationship_commands import RelationshipCommands
+from tomi_data.persistency.generators.base_generator import BaseGenerator
+from tomi_data.persistency.generators.neo4j.node_commands import NodeCommands
+from tomi_data.persistency.generators.neo4j.relationship_commands import RelationshipCommands
 
 
 class GraphCommands(BaseGenerator):

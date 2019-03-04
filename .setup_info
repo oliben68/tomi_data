@@ -1,5 +1,5 @@
 package:
-    name: tomi_data
+    name: tomi
     version: 0.0.1
     configuration_pkg: config
     tests: pytest
