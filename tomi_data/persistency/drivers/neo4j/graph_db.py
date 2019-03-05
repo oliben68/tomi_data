@@ -1,13 +1,9 @@
 from hopla.base.shared.meta_singleton import MetaSingleton
+from neo4j import GraphDatabase
 from neobolt.exceptions import ServiceUnavailable
+from tomi_config import CONFIG
 
 from tomi_data.persistency.operation import Operation, OperationType
-
-try:
-    from hopla.base.config import DB_CONFIG
-except ImportError:
-    from hopla.base.config.defaults import DB_CONFIG
-from neo4j import GraphDatabase
 
 
 class GraphDb(metaclass=MetaSingleton):
@@ -24,12 +20,11 @@ class GraphDb(metaclass=MetaSingleton):
         self._driver = None
         self._operations = {}
         try:
-            print(DB_CONFIG)
             self._driver = GraphDatabase.driver(
-                "{protocol}://{host}:{port}".format(protocol=DB_CONFIG["server"]["protocol"],
-                                                    host=DB_CONFIG["server"]["host"],
-                                                    port=DB_CONFIG["server"]["port"]),
-                auth=(DB_CONFIG["user"]["name"], DB_CONFIG["user"]["password"]))
+                "{protocol}://{host}:{port}".format(protocol=CONFIG.DB_CONFIG["server"]["protocol"],
+                                                    host=CONFIG.DB_CONFIG["server"]["host"],
+                                                    port=CONFIG.DB_CONFIG["server"]["port"]),
+                auth=(CONFIG.DB_CONFIG["user"]["name"], CONFIG.DB_CONFIG["user"]["password"]))
         except ServiceUnavailable as ex:
             init_operation.data = ex
         self._operations[init_operation.timestamp] = init_operation
