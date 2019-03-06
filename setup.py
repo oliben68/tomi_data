@@ -1,11 +1,7 @@
-import glob
 import os
-import site
 import sys
-from distutils.dir_util import copy_tree
 
 import yaml
-from setuptools import Command
 from setuptools import find_packages
 from setuptools import setup
 from setuptools.command.test import test as TestCommand
@@ -44,7 +40,9 @@ setup(
     author='Olivier Steck',
     author_email='osteck@gmail.com',
     description='TBD',
-    install_requires=['neo4j', 'hopla', 'neobolt'],
+    install_requires=['neo4j',
+                      'tomi_base',
+                      'neobolt'],
     extras_require=dict(
         test=['testfixtures', ],
     ),

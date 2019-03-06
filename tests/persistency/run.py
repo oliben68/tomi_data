@@ -1,7 +1,7 @@
-from hopla.base.graphs.nodes.node import Node
+from tomi_base.base.graphs.nodes.node import Node
 
-from hopla.persistency.dal.neo4j import CypherOperations
-from hopla.persistency.generators import NodeCommands
+from tomi_base.persistency.dal.neo4j import CypherOperations
+from tomi_base.persistency.generators import NodeCommands
 
 n1 = Node({"test": {"value": "ABC"}})
 CypherOperations.create_node(n1)

@@ -12,6 +12,12 @@ class OperationType(Enum):
     NONE = "None"
 
 
+class OperationResult(Enum):
+    SUCCESS = "Success"
+    FAILURE = "Failure"
+    UNKNOWN = "Unknown"
+
+
 class Operation(object):
     @property
     def operation(self):
@@ -32,6 +38,10 @@ class Operation(object):
     @property
     def comment(self):
         return self._comment
+
+    @comment.setter
+    def comment(self, value):
+        self._comment = value
 
     @property
     def timestamp(self):
@@ -63,8 +73,13 @@ class Operation(object):
         except ValueError:
             self._timestamp = datetime.utcnow().timestamp()
 
+    def toDict(self):
+        return dict(timestamp=self.timestamp, operation=self.operation.value, comment=self.comment, data=self.data)
+
     def __str__(self):
-        return dumps(dict(operation=self.operation.value, comment=self.comment, timestamp=self.timestamp))
+        return dumps(self.toDict())
+
+    __repr__ = __str__
 
     def __hash__(self):
         return hash(str(self))

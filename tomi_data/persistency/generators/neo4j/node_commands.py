@@ -1,7 +1,7 @@
 from collections.abc import MutableSequence
 
-from hopla.base.collections import flatten
-from hopla.base.graphs.nodes.node import Node
+from tomi_base.base.collections import flatten
+from tomi_base.base.graphs.nodes.node import Node
 
 from tomi_data.persistency.generators.neo4j.cypher_commands import CypherCommands
 

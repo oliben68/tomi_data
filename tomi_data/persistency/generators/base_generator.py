@@ -1,6 +1,6 @@
 from abc import ABC
 
-from hopla.base.shared.tools import Tools
+from tomi_base.base.shared.tools import Tools
 
 
 class BaseGenerator(ABC):
