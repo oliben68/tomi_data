@@ -1,6 +1,6 @@
-from tomi_base.base.collections import flatten
-from tomi_base.base.graphs.relationships.core.direction import Direction
-from tomi_base.base.graphs.relationships.relationship import Relationship
+from tomi_base.collections import flatten
+from tomi_base.graphs.relationships.core.direction import Direction
+from tomi_base.graphs.relationships.relationship_class import Relationship
 
 from tomi_data.persistency.generators.neo4j.cypher_commands import CypherCommands
 from tomi_data.persistency.generators.neo4j.node_commands import NodeCommands

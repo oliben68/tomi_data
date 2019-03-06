@@ -1,4 +1,4 @@
-from tomi_base.base.shared.meta_singleton import MetaSingleton
+from tomi_base.shared.meta_singleton import MetaSingleton
 from neo4j import GraphDatabase
 from neobolt.exceptions import ServiceUnavailable
 from tomi_config import CONFIG

@@ -1,8 +1,8 @@
 from datetime import datetime
 
-from tomi_base.base.collections import expand
-from tomi_base.base.graphs.nodes.node import Node
-from tomi_base.base.graphs.relationships.core.direction import Direction
+from tomi_base.collections import expand
+from tomi_base.graphs.nodes.node_class import Node
+from tomi_base.graphs.relationships.core.direction import Direction
 from neo4j.types.graph import Node as Neo4jNode
 
 from tomi_data.persistency.drivers.neo4j.graph_db import NEO_INSTANCE

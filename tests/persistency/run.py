@@ -1,4 +1,4 @@
-from tomi_base.base.graphs.nodes.node import Node
+from tomi_base.graphs.nodes.node import Node
 
 from tomi_base.persistency.dal.neo4j import CypherOperations
 from tomi_base.persistency.generators import NodeCommands

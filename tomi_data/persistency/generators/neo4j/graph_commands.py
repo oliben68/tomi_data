@@ -1,4 +1,4 @@
-from tomi_base.base.graphs.graphs.graph import Graph
+from tomi_base.graphs.graphs.graph import Graph
 
 from tomi_data.persistency.generators.base_generator import BaseGenerator
 from tomi_data.persistency.generators.neo4j.node_commands import NodeCommands
