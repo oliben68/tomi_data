@@ -172,3 +172,5 @@ fabric.properties
 
 .idea/*.xml
 .idea/*.iml
+
+.DS_Store
