@@ -4,7 +4,7 @@ import sys
 import yaml
 from setuptools import find_packages
 from setuptools import setup
-from setuptools.command.test import test as TestCommand
+from setuptools.command.test import test as test_command
 
 
 def _load_setup_info():
@@ -17,11 +17,11 @@ TESTING = SETUP_INFO["tests"]
 CONF_PKG = SETUP_INFO["configuration_pkg"]
 
 
-class PyTest(TestCommand):
+class PyTest(test_command):
     user_options = [("pytest-args=", "a", "Arguments to pass to pytest")]
 
     def initialize_options(self):
-        TestCommand.initialize_options(self)
+        test_command.initialize_options(self)
         self.pytest_args = SETUP_INFO["testing"][TESTING]["args"].format(name=SETUP_INFO["name"])
 
     def run_tests(self):
@@ -30,6 +30,7 @@ class PyTest(TestCommand):
 
         err_no = pytest.main(shlex.split(self.pytest_args))
         sys.exit(err_no)
+
 
 setup(
     name=SETUP_INFO["name"],
@@ -41,8 +42,10 @@ setup(
     author_email='osteck@gmail.com',
     description='TBD',
     install_requires=['neo4j',
+                      'neobolt',
                       'tomi_base',
-                      'neobolt'],
+                      'tomi_graph',
+                      'ujson', ],
     extras_require=dict(
         test=['testfixtures', ],
     ),

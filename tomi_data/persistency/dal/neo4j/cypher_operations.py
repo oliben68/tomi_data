@@ -1,15 +1,18 @@
 from datetime import datetime
 
-from tomi_base.collections import expand
-from tomi_base.graphs.nodes.node_class import Node
-from tomi_base.graphs.relationships.core.direction import Direction
+from hopla.collections import expand
 from neo4j.types.graph import Node as Neo4jNode
+from tomi_base.collections import flatten_lists
+from tomi_graph.nodes.node_class import Node, NodeBaseClass
+from tomi_graph.relationships.core.direction import Direction
 
+from tomi_data.persistency.dal.neo4j import before_operations, after_operations
+from tomi_data.persistency.dal.neo4j.cypher_operations_logic import CypherOperationsLogic
+from tomi_data.persistency.dal.operation import OperationType, Operation
 from tomi_data.persistency.drivers.neo4j.graph_db import NEO_INSTANCE
-from tomi_data.persistency.generators.neo4j.graph_commands import GraphCommands
-from tomi_data.persistency.generators.neo4j.node_commands import NodeCommands
-from tomi_data.persistency.generators.neo4j.relationship_commands import RelationshipCommands
-from tomi_data.persistency.operation import OperationType, Operation
+from tomi_data.persistency.generators.cypher.graph_commands import GraphCommands
+from tomi_data.persistency.generators.cypher.node_commands import NodeCommands
+from tomi_data.persistency.generators.cypher.relationship_commands import RelationshipCommands
 
 
 class CypherOperations(object):
@@ -37,25 +40,25 @@ class CypherOperations(object):
         return results
 
     @staticmethod
+    @after_operations(CypherOperationsLogic.guarantee_unique_constraint_created)
+    @after_operations(CypherOperationsLogic.guarantee_indexes_created)
     def create_node(node, variable=None):
-        create_node_operation = Operation(OperationType.CREATE,
-                                          command=NodeCommands(node).self_generate_create(variable=variable))
-
-        return CypherOperations._execute([create_node_operation])
+        return CypherOperations._execute([Operation(OperationType.CREATE,
+                                                    command=NodeCommands(node).create_command(variable=variable))])
 
     @staticmethod
+    @after_operations(CypherOperationsLogic.guarantee_unique_constraint_created)
+    @after_operations(CypherOperationsLogic.guarantee_indexes_created)
     def merge_node(node, variable=None):
-        create_node_operation = Operation(OperationType.CREATE,
-                                          command=NodeCommands(node).self_generate_merge(variable=variable))
-
-        return CypherOperations._execute([create_node_operation])
+        return CypherOperations._execute([Operation(OperationType.CREATE,
+                                                    command=NodeCommands(node).merge_command(variable=variable))])
 
     @staticmethod
     def query_node(node_type=None, variable=None, **properties):
         results = []
         variable = str(variable) if variable is not None else "n"
         cypher_command = "{match} RETURN {variable}".format(
-            match=NodeCommands.generate_match(variable=variable, node_type=node_type, **properties),
+            match=NodeCommands.match_command_for_type(variable=variable, node_type=node_type, **properties),
             variable=variable)
 
         cypher_results = CypherOperations._execute([Operation(OperationType.RETRIEVE, command=cypher_command)])
@@ -71,7 +74,7 @@ class CypherOperations(object):
             if type(result_value) != Neo4jNode:
                 continue  # maybe raise exception here
 
-            node_properties = {Node.properties_mapping[k]: v for k, v in expand(result_value).items()}
+            node_properties = {Node.get_properties_mapping()[k]: v for k, v in expand(result_value).items()}
 
             results.append(Node(**node_properties))
 
@@ -82,8 +85,7 @@ class CypherOperations(object):
         variable = str(variable) if variable is not None else "n"
 
         cypher_command = "{match} RETURN {variable}".format(
-            match=NodeCommands(node).self_generate_match(variable=variable, node_type=node.node_type),
-            variable=variable)
+            match=NodeCommands(node).match_command(variable=variable, node_type=node.node_type), variable=variable)
 
         results = CypherOperations._execute([Operation(OperationType.RETRIEVE, command=cypher_command)])
 
@@ -97,9 +99,8 @@ class CypherOperations(object):
         if type(result_value) != Neo4jNode:
             return None  # maybe raise exception here
 
-        node_properties = {Node.properties_mapping[k]: v for k, v in expand(result_value).items()}
+        node_properties = {Node.get_properties_mapping()[k]: v for k, v in expand(result_value).items()}
         node_properties["node_type"] = node.node_type
-        print(node_properties)
 
         return Node(**node_properties) == node
 
@@ -112,22 +113,11 @@ class CypherOperations(object):
         pass
 
     @staticmethod
+    @before_operations(CypherOperationsLogic.guarantee_nodes_exist)
     def create_relationship(relationship, variable=None):
-        node1_var = "n1"
-        node2_var = "n2"
-
-        transaction = []
-
-        nodes_merge_command = NodeCommands(relationship.node_1).self_generate_merge(variable=node1_var) + " " + \
-                              NodeCommands(relationship.node_1).self_generate_merge(variable=node2_var)
-        transaction.append(Operation(OperationType.CREATE,
-                                     command=nodes_merge_command))
-
-        transaction.append(Operation(OperationType.CREATE,
-                                     command=RelationshipCommands(relationship).self_generate_create(
-                                         variable=variable)))
-
-        return CypherOperations._execute(transaction)
+        return CypherOperations._execute([Operation(OperationType.CREATE,
+                                                    command=RelationshipCommands(relationship).create_command(
+                                                        variable=variable))])
 
     @staticmethod
     def create_nodes_relationship(node1, node2, direction=None, variable=None, rel_type=None, **properties):
@@ -152,5 +142,39 @@ class CypherOperations(object):
 
     @staticmethod
     def save_graph(graph):
-        return CypherOperations._execute(
-            Operation.create(OperationType.CREATE, commands=GraphCommands(graph).save_all()))
+        results = []
+
+        # listing all the nodes in the graph
+        for node in graph.nodes.values():
+            results.append(CypherOperations.create_node(node))
+
+        # listing all the relationships in the graph
+        for relationship in graph.relationships:
+            results.append(CypherOperations.create_relationship(relationship))
+
+        return results
+
+    @staticmethod
+    def create_constraint(node, constraint_field, variable=None):
+        return CypherOperations._execute([Operation(OperationType.CREATE,
+                                                    command=NodeCommands(node).create_constraint(constraint_field,
+                                                                                                 variable=variable))])
+
+    @staticmethod
+    def create_unique_constraint(node, variable=None):
+        unique_constraint_field = NodeBaseClass.serialize(node.unique_constraint_name())
+        return CypherOperations._execute([Operation(OperationType.CREATE,
+                                                    command=NodeCommands(node).create_constraint(
+                                                        unique_constraint_field,
+                                                        variable=variable))])
+
+    @staticmethod
+    def create_indexes(node, variable=None):
+        results = []
+        # NOTE!!!!: in neo4j composite indexes do not exist: we therefore create one index per mentioned
+        # field in --ALL-- indexes
+        for field in set(flatten_lists([fields for fields in node.get_type_indexes().values()])):
+            results.append(CypherOperations._execute(
+                [Operation(OperationType.CREATE, command=NodeCommands(node).create_index(field))]))
+
+        return results

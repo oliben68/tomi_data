@@ -12,7 +12,7 @@ class BaseGenerator(ABC):
         return self._entity
 
     def __init__(self, entity):
-        if type(entity) != self.entity_type and not isinstance(entity, self.entity_type):
+        if not isinstance(entity, self.entity_type):
             raise TypeError(
                 "Wrong root_node type: should be {type} but is {wrong_type}.".format(type=self.entity_type.__name,
                                                                                      wrong_type=type(entity).__name))

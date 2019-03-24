@@ -1,23 +1,22 @@
-from tomi_base.graphs.nodes.node import Node
+from tomi_graph.nodes.node_class import NodeBaseClass
+from tomi_graph.entity_class_generator import EntityClassGenerator
+from tomi_graph.version_aware_entity import VersionAwareEntity
+from tomi_graph.indexes_support import IndexesSupport
 
-from tomi_base.persistency.dal.neo4j import CypherOperations
-from tomi_base.persistency.generators import NodeCommands
+from tomi_data.persistency.generators.cypher.graph_commands import GraphCommands
 
-n1 = Node({"test": {"value": "ABC"}})
-CypherOperations.create_node(n1)
-nsg1 = NodeCommands(n1)
+NodeTest = EntityClassGenerator(NodeBaseClass, VersionAwareEntity, IndexesSupport).create("NodeTest")
 
-n2 = Node({"test": {"value": "BCD"}})
-CypherOperations.create_node(n2)
-nsg2 = NodeCommands(n2)
+ids = ["A", "B", "C", "D", "E", "ROOT"]
 
-r1 = (n1 < n2)(rel_type="buddies_ole_boys",
-               data={"how": {"we": "test"}, "the depth": "of", "our souls": {"is": "a mystery"}})
-# matches = "{m1}, {m2}".format(
-#     m1=nsg1.self_generate_match(excluded=["__create_date", "__update_date"], variable="n1"),
-#     m2=nsg2.self_generate_match(excluded=["__create_date", "__update_date"], variable="n1"))
-# print(RelationshipCommands(r1).self_generate_create(variable="r1"))
+d_a = NodeTest(ids[0], id=ids[0])
+d_b = NodeTest(ids[1], id=ids[1])
+d_c = NodeTest(ids[2], id=ids[2])
+d_d = NodeTest(d_a, d_b, d_c, id=ids[3])
+d_e = NodeTest([{"D_d": d_d}], id=ids[4])
+root = NodeTest(d_e, id="Root")
+g = root.graph
 
-# result = CypherOperations.create_nodes_relationship(n1, n2, rel_type="BUDDINSKY", variable='r')
-result = CypherOperations.delete_all()  # create_relationship(r1, variable='r')
-result
+
+from tomi_data.persistency.generators.cypher.graph_commands import GraphCommands
+cms = GraphCommands(g).save_all()

@@ -3,8 +3,8 @@ from neo4j import GraphDatabase
 from neobolt.exceptions import ServiceUnavailable
 from tomi_config import CONFIG
 
-from tomi_data.persistency.operation import Operation, OperationType, OperationResult
-from tomi_data.persistency.operations_cache import OperationsCache
+from tomi_data.persistency.dal.operation import Operation, OperationType, OperationResult
+from tomi_data.persistency.dal.operations_cache import OperationsCache
 
 
 class GraphDb(metaclass=MetaSingleton):

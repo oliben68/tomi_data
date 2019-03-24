@@ -2,7 +2,7 @@ import ujson
 from collections.abc import MutableMapping
 
 from tomi_base.shared.logging.facade import Slf4p
-from tomi_data.persistency.operation import Operation
+from tomi_data.persistency.dal.operation import Operation
 
 
 @Slf4p()
