@@ -173,4 +173,5 @@ fabric.properties
 .idea/*.xml
 .idea/*.iml
 
-.DS_Store
+.idea/inspectionProfiles/Project_Defaults.xml
+
