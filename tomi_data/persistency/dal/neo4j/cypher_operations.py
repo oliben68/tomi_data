@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from hopla.collections import expand
+from tomi_base.collections import expand
 from neo4j.types.graph import Node as Neo4jNode
 from tomi_base.collections import flatten_lists
 from tomi_graph.nodes.node_class import Node, NodeBaseClass

@@ -8,7 +8,7 @@ ENV NEO4J_SHA256=d4b6e48327d5283131e9a38db25d722119e21ef5420b3cc393b9263aa37313e
     NEO4J_HOME="/var/lib/neo4j"
 ARG NEO4J_URI=http://dist.neo4j.org/neo4j-community-3.5.3-unix.tar.gz
 
-COPY ./local-package/* /tmp/
+COPY local-package /tmp/
 
 RUN apk add --no-cache --quiet \
     bash \
@@ -41,6 +41,7 @@ VOLUME /data /logs
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 
 EXPOSE 7474 7473 7687
+
 
 ENTRYPOINT ["/sbin/tini", "-g", "--", "/docker-entrypoint.sh"]
 CMD ["neo4j"]
